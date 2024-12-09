@@ -1,0 +1,127 @@
+#include <iostream>
+using namespace std;
+class matrix {
+    int row, column, m[3][3];
+    
+public:
+    void input() {
+        cout << "Enter number of rows: ";
+        cin >> row;
+        cout << "Enter number of columns: ";
+        cin >> column;
+        cout << "elements:\n";
+        for (int i = 0; i < row; i++) {
+            for (int j = 0; j < column; j++) {
+                cin >> m[i][j];
+            }
+        }
+    }
+
+    void display() {
+        for (int i = 0; i < row; i++) {
+            for (int j = 0; j < column; j++) {
+                cout << m[i][j] << " ";
+            }
+            cout << "\n";
+        }
+    }
+
+    void check() {
+        int ze = 0, nze = 0;
+        for (int i = 0; i < row; i++) {
+            for (int j = 0; j < column; j++) {
+                if (m[i][j] == 0)
+                    ze++;
+                else
+                    nze++;
+            }
+        }
+        if (ze > (row * column) / 2) {
+            cout << "sparse matrix\n";
+            cout << "triplet rep:\n";
+            cout << "row\tcolumn\tval\n";
+            for (int i = 0; i < row; i++) {
+                for (int j = 0; j < column; j++) {
+                    if (m[i][j] != 0) {
+                        cout << i << "\t" << j << "\t" << m[i][j] << "\n";
+                    }
+                }
+            }
+        } else {
+            cout << "Not Sparse\n";
+        }
+    }
+
+    void transpose() {
+        cout << "Transpose of the matrix:\n";
+        for (int i = 0; i < column; i++) {
+            for (int j = 0; j < row; j++) {
+                cout << m[j][i] << " ";
+            }
+            cout << "\n";
+        }
+    }
+
+    void multiply(matrix mat2) {
+        if (column != mat2.row) {
+            cout << "multiplication not possible\n";
+            return;
+        }
+
+        matrix result;
+        result.row = row;
+        result.column = mat2.column;
+
+        for (int i = 0; i < row; i++) {
+            for (int j = 0; j < mat2.column; j++) {
+                result.m[i][j] = 0;
+            }
+        }
+
+        for (int i = 0; i < row; i++) {
+            for (int j = 0; j < mat2.column; j++) {
+                for (int k = 0; k < column; k++) {
+                    result.m[i][j] += m[i][k] * mat2.m[k][j];
+                }
+            }
+        }
+
+        cout << "after multiplying:\n";
+        result.display();
+    }
+};
+
+int main() {
+    matrix mat1, mat2;
+    int choice;
+
+    cout << "1. sparsity and triplet rep\n";
+    cout << "2. transpose\n";
+    cout << "3. multiplication\n";
+    cout << "4. exit\n";
+    cout << "enter choice: ";
+    cin >> choice;
+
+    switch (choice) {
+    case 1:
+        mat1.input();
+        mat1.check();
+        break;
+
+    case 2:
+        mat1.input();
+        mat1.transpose();
+        break;
+
+    case 3:
+        cout << "enter details of the 1st matrix:\n";
+        mat1.input();
+        cout << "Enter details of the 2nd matrix:\n";
+        mat2.input();
+        mat1.multiply(mat2);
+        break;
+
+    case 4:
+        cout << "Bye bye!\n";
+        break;
+}
